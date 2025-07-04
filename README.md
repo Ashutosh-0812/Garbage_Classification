@@ -1,109 +1,125 @@
 # 🗑️ Garbage Classification Project
 
 Welcome to the **Garbage Classification** project!  
-This repository demonstrates how to build and train a deep learning model to automatically classify images of garbage into different categories using TensorFlow and EfficientNetV2B2.
+This repository demonstrates how to build and train a deep learning model to automatically classify images of garbage into categories using **TensorFlow** and **EfficientNetV2B2**, and also deploy it with **Gradio**.
 
 ---
 
 ## 🚀 Overview
 
-This Jupyter Notebook walks you through:
-- Checking GPU availability for fast training
-- Unzipping and preparing your dataset
-- Loading, splitting, and efficiently processing image data
-- Building and training a deep learning model
-- Visualizing training progress and results
-- Evaluating and testing the model
+This project walks you through:
+- Checking GPU availability (for faster training on Colab)
+- Preparing and processing image datasets
+- Building and training a deep learning model using transfer learning
+- Visualizing training metrics and results
+- Evaluating performance on test data
+- Deploying a simple user interface with **Gradio**
 
 ---
 
-## 🗃️ File Structure
-
-- **`Garbage_class.ipynb`** — Main notebook (run this in [Google Colab](https://colab.research.google.com/) for best experience)
-- **`garbage.zip`** — (Expected) Zipped dataset containing images in subfolders by class
-
----
 
 ## 🧩 Requirements
 
-- Python 3.x
-- [TensorFlow](https://www.tensorflow.org/) (>=2.x)
-- [Gradio](https://gradio.app/) (for UI, optional)
-- Matplotlib
-- Numpy
-- Pillow (PIL)
-
-Install with:
+Ensure you have the following packages installed:
 
 ```bash
 pip install tensorflow gradio matplotlib numpy pillow
 ```
 
+**Dependencies:**
+- Python 3.x
+- TensorFlow (>=2.x)
+- Gradio (for the interactive UI)
+- NumPy
+- Matplotlib
+- Pillow (PIL)
+
 ---
 
 ## 📂 Dataset
 
-Place your zipped dataset (`garbage.zip`) at the root of your Colab or working directory.  
-The dataset should contain a folder named `TrashType_Image_Dataset` with subdirectories for each garbage class (e.g., plastic, metal, etc.).
+Your dataset (`garbage.zip`) should include a folder like this:
+
+```
+TrashType_Image_Dataset/
+├── cardboard/
+├── glass/
+├── metal/
+├── paper/
+├── plastic/
+└── trash/
+```
+
+Each subfolder should contain images of the corresponding class.
 
 ---
 
 ## 🏗️ Model Architecture
 
-- **Base:** EfficientNetV2B2 (pre-trained on ImageNet)
-- **Custom Layers:** GlobalAveragePooling, Dense, Dropout, Output (Softmax)
-- **Input Size:** 124 x 124 px
-- **Classes:** 6 (auto-detected from dataset)
-- **Loss:** Sparse Categorical Crossentropy
+- **Base Model:** EfficientNetV2B2 (pre-trained on ImageNet)
+- **Input Size:** 124x124 pixels
+- **Custom Layers:**  
+  - `GlobalAveragePooling2D`  
+  - `Dense`, `Dropout`, `Softmax` output layer
+- **Loss Function:** `SparseCategoricalCrossentropy`
 - **Optimizer:** Adam
-- **Epochs:** 10 (feel free to experiment!)
+- **Epochs:** 10 (can be tuned)
+- **Classes:** Automatically inferred from dataset folders
 
 ---
 
 ## 📝 How to Use
 
-1. **Upload your dataset.**  
-   Make sure `garbage.zip` is present and contains the right folder structure.
+1. **Upload the dataset.**  
+   Place `garbage.zip` in your working directory and unzip it.
 
 2. **Run the Notebook.**  
-   Open `Garbage_class.ipynb` in Colab or Jupyter and execute all cells.
+   Execute all cells in  `Garbage_ClassificationFinal.ipynb`.
 
-3. **Monitor Progress.**  
-   - Training/validation accuracy and loss are plotted after each epoch.
-   - Test set performance is evaluated at the end.
-   - Example predictions are visualized alongside actual labels.
+3. **Monitor training:**  
+   - Training and validation loss/accuracy are plotted
+   - Test set evaluation and predictions are shown at the end
+
+---
+
+## 🌐 Deployment
+
+The project is deployed with **Gradio**, allowing users to upload an image and get predictions instantly.
+
+🔗 **[Live Gradio App](https://huggingface.co/spaces/ashu0812/Garbage-Classification)**  
+
 
 ---
 
 ## 📊 Results & Visualization
 
-- **Accuracy & Loss Curves:** Track model performance over epochs.
-- **Prediction Samples:** See side-by-side true and predicted labels for test images.
-- **Reported Test Accuracy:** ~100% (may vary; watch for overfitting on small datasets!)
+- **Accuracy & Loss Curves:** Displayed after each epoch
+- **Prediction Samples:** Test images with predicted vs actual labels
+- **Test Accuracy:** ~100% (on small dataset; may vary depending on size and complexity)
 
 ---
 
-## 💡 Notes
+## ⚠️ Notes
 
-- Dataset folder structure should match what `image_dataset_from_directory` expects.
-- The notebook is written for Colab (GPU support).
-- Gradio is imported for potential UI use, but not deployed in this notebook.
-- For large datasets, training time will depend on GPU availability.
+- Make sure your folder structure matches `image_dataset_from_directory` expectations.
+- Training on larger datasets will benefit significantly from GPU acceleration.
+- The Gradio interface shows only the top predicted class with confidence score.
+- Overfitting may occur on small datasets — use validation and regularization wisely.
 
 ---
 
-## 🏷️ License
+## 📜 License
 
-Please verify your dataset’s license before use or sharing.
+Please ensure your dataset complies with its license before distribution or reuse.
 
 ---
 
 ## 🙌 Acknowledgments
 
-- TensorFlow and Keras Team
-- EfficientNet authors
-- Open-source dataset providers
+- TensorFlow/Keras team for powerful deep learning tools
+- Authors of EfficientNet
+- Open-source image dataset creators
 
 ---
 
-**Happy Classifying! 🧹🌱**
+**Happy Classifying! 🧠♻️**
