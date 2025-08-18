@@ -3,11 +3,29 @@ import numpy as np
 from PIL import Image
 import tensorflow as tf
 
+# Debugging: Print TensorFlow version
+st.write(f"TensorFlow Version: {tf.__version__}")
+
+# Clear TensorFlow session to avoid name scope issues
+tf.keras.backend.clear_session()
+
 # Load the Keras model
 @st.cache_resource  # Prevents reloading on every run
 def load_model():
-    return tf.keras.models.load_model("Educell_Garbage.keras", compile=False)
+    try:
+        model = tf.keras.models.load_model("Educell_Garbage.keras", compile=False)
+        st.success("Model loaded successfully")
+        return model
+    except Exception as e:
+        st.error(f"Error loading model: {e}")
+        return None
+
 model = load_model()
+
+# Check if model loaded successfully
+if model is None:
+    st.error("Failed to load the model. Please check the model file and TensorFlow version.")
+    st.stop()
 
 # Define class names as per your training
 class_names = ['cardboard', 'glass', 'metal', 'paper', 'plastic', 'trash']
@@ -25,21 +43,23 @@ if uploaded_file is not None:
 
     # Preprocessing (resizing, scaling)
     img_resized = img.resize((124, 124))
-    img_array = np.array(img_resized, dtype=np.float32)
+    img_array = np.array(img_resized, dtype=np.float32) / 255.0  # Normalize to [0,1]
     img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
 
-    # Prediction
-    prediction = model.predict(img_array)[0]
-    predicted_class = class_names[np.argmax(prediction)]
-    confidence = float(np.max(prediction)) * 100
+    try:
+        # Prediction
+        prediction = model.predict(img_array)[0]
+        predicted_class = class_names[np.argmax(prediction)]
+        confidence = float(np.max(prediction)) * 100
 
-    st.markdown(
-        f"""
-        ### 📁 **Predicted Class:** `{predicted_class.upper()}`
-        ### 🎯 **Confidence:** `{confidence:.2f}%`
-        """
-    )
+        st.markdown(
+            f"""
+            ### 📁 **Predicted Class:** `{predicted_class.upper()}`
+            ### 🎯 **Confidence:** `{confidence:.2f}%`
+            """
+        )
+    except Exception as e:
+        st.error(f"Error during prediction: {e}")
 
 st.markdown("---")
 st.markdown("Made with ❤️ for smart waste segregation")
-
